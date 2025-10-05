@@ -3,37 +3,41 @@ package com.example.user;
 import jakarta.persistence.*;
 import org.jspecify.annotations.Nullable;
 
-import java.time.Instant;
-import java.time.LocalDate;
-
 @Entity
-@Table(name = "user")
-public class User {
-
+public class User
+{
+    @Id
+    @GeneratedValue
     public static final int USERNAME_MAX_LENGTH = 32;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "user_id")
     private Long id;
 
     @Column(name = "name", nullable = false, length = USERNAME_MAX_LENGTH)
     private String name = "";
 
+    @Column(name = "name", nullable = false, length = USERNAME_MAX_LENGTH)
+    private String email = "";
+
     protected User() { // To keep Hibernate happy
     }
 
-    public User(Long id, String name) {
+    public User(Long id, String name, String email) {
         this.id = id;
         this.name = name;
+        this.email = email;
     }
 
     public @Nullable Long getId() {
         return id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override
