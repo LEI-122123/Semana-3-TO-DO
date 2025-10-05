@@ -26,7 +26,13 @@ src
 │       │   │   └── TaskListView.java
 │       │   ├── Task.java
 │       │   ├── TaskRepository.java
-│       │   └── TaskService.java                
+│       │   └── TaskService.java
+│       ├── user
+│       │   ├── ui
+│       │   │   └── UserView.java
+│       │   ├── User.java
+│       │   ├── UserRepository.java
+│       │   └── UserService.java                
 │       └── Application.java       
 └── test/java
     └── [application package]
