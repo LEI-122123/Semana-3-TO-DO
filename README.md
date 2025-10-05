@@ -1,6 +1,10 @@
 # App README
 
-- [ ] TODO Replace or update this README with instructions relevant to your application
+- 66174 Rúben Rocha  
+- 106090 Tiago Alves  
+- 113239 Pedro Veloso  
+- 122123 Rodrigo Delaunay  
+
 
 ## Project Structure
 
