@@ -4,19 +4,20 @@ import jakarta.persistence.*;
 import org.jspecify.annotations.Nullable;
 
 @Entity
+@Table(name = "app_user")   //  cannot have table "user" in a H2 database; Table created dynamically by Hibernate (ignore IDE warning)
 public class User
 {
-    @Id
-    @GeneratedValue
     public static final int USERNAME_MAX_LENGTH = 32;
 
-    @Column(name = "user_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "user_id")   // Table created dynamically by Hibernate (ignore IDE warning)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = USERNAME_MAX_LENGTH)
+    @Column(name = "name", nullable = false, length = USERNAME_MAX_LENGTH)  //  Ditto
     private String name = "";
 
-    @Column(name = "name", nullable = false, length = USERNAME_MAX_LENGTH)
+    @Column(name = "email", nullable = false)   //  length = 255 (default value)    //  Ditto
     private String email = "";
 
     protected User() { // To keep Hibernate happy
