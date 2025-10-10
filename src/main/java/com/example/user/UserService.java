@@ -16,12 +16,12 @@ public class UserService
     }
 
     @Transactional
-    public void createUser(Long id, String name, String email)
+    public void createUser(String name, String email, String password)
     {
-        if (id < 0){
-            throw new RuntimeException("This is for testing the error handler");
-        }
-        var user = new User(id, name, email);
+//        if (id < 0){
+//            throw new RuntimeException("This is for testing the error handler");
+//        }
+        var user = new User(name, email, password);
 
         userRepository.saveAndFlush(user);
     }
@@ -31,6 +31,7 @@ public class UserService
         return userRepository.findAllBy(pageable).toList();
     }
 
+    @Transactional(readOnly = true)
     public List<User> findAll() {
         return userRepository.findAll();
     }

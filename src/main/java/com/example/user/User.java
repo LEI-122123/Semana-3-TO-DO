@@ -9,8 +9,10 @@ public class User
 {
     public static final int USERNAME_MAX_LENGTH = 32;
 
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator( name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
     @Column(name = "user_id")   // Table created dynamically by Hibernate (ignore IDE warning)
     private Long id;
 
@@ -20,13 +22,17 @@ public class User
     @Column(name = "email", nullable = false)   //  length = 255 (default value)    //  Ditto
     private String email = "";
 
+    @Column(name = "pw", nullable = false)
+    private String password = "";
+
     protected User() { // To keep Hibernate happy
     }
 
-    public User(Long id, String name, String email) {
+    public User(String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 
     public @Nullable Long getId() {
@@ -39,6 +45,11 @@ public class User
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword()
+    {
+        return password;
     }
 
     @Override
