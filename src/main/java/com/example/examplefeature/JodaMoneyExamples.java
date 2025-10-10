@@ -21,8 +21,6 @@ public class JodaMoneyExamples {
         System.out.println("\n=== 4. Comparing and Checking Amounts ===");
         comparisonExample();
 
-        System.out.println("\n=== 6. Rounding Example ===");
-        roundingExample();
     }
 
     // 1️⃣ Basic Money Creation
@@ -63,14 +61,5 @@ public class JodaMoneyExamples {
         }
     }
 
-    // 6️⃣ Rounding Example
-    private static void roundingExample() {
-        Money value = Money.of(CurrencyUnit.EUR, 10.127);
-        // Use scale and rounding manually
-        Money rounded = Money.of(value.getCurrencyUnit(), value.getAmount().setScale(2, RoundingMode.HALF_UP));
-
-        System.out.println("Original: " + value);
-        System.out.println("Rounded: " + rounded);
-    }
 
 }
