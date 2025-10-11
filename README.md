@@ -94,3 +94,34 @@ The [Getting Started](https://vaadin.com/docs/latest/getting-started) guide will
 App implementation. You'll learn how to set up your development environment, understand the project 
 structure, and find resources to help you add muscles to your skeleton — transforming it into a fully-featured 
 application.
+
+
+## Initialize the MariaDB database
+
+- Download MariaDB
+- Create a new database
+  - `CREATE DATABASE <database_name>;`
+
+### Useful MariaDB queries/commands:  
+
+#### - Base commands:
+```mysql 
+SELECT User, Host FROM mysql.user;  # Check existing users on mariadb
+SELECT USER();      # Check who you authenticated as
+SHOW DATABASES      # Check existing databases
+USE <database>;     # Select which database you want to perform queries on
+SHOW TABLES;        # Show existing tables on the current database you selected
+DESCRIBE <table>;   # Show the data structure of a specified table 
+```
+
+#### - Clear and reset an existing table:
+```mysql
+TRUNCATE TABLE <table_name>;
+ALTER TABLE <table_name> AUTO_INCREMENT = 1;
+```
+
+#### - Change an user password:
+```mysql
+ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('new_password');
+FLUSH PRIVILEGES;
+```
