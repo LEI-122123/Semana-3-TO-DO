@@ -24,6 +24,7 @@ public class Graphs {
     @Column(name = "task_id")
     private Long id;
 
+
     private final String type;
     private final String title;
 
