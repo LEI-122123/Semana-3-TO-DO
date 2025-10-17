@@ -3,10 +3,12 @@ package com.example.examplefeature.ui;
 import com.example.base.ui.component.ViewToolbar;
 import com.example.examplefeature.Task;
 import com.example.examplefeature.TaskService;
+import com.example.pdfexporter.PdfExporter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -14,11 +16,16 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.List;
 import java.util.Optional;
 
 import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRequest;
@@ -34,6 +41,7 @@ class TaskListView extends Main {
     final DatePicker dueDate;
     final Button createBtn;
     final Grid<Task> taskGrid;
+    final Button downloadBtn;
 
     TaskListView(TaskService taskService) {
         this.taskService = taskService;
@@ -51,6 +59,9 @@ class TaskListView extends Main {
         createBtn = new Button("Create", event -> createTask());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+        downloadBtn = new Button("Download PDF", event -> downloadPdfAction());
+        downloadBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
         var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(getLocale())
                 .withZone(ZoneId.systemDefault());
         var dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(getLocale());
@@ -67,8 +78,18 @@ class TaskListView extends Main {
         addClassNames(LumoUtility.BoxSizing.BORDER, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.Padding.MEDIUM, LumoUtility.Gap.SMALL);
 
-        add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn)));
+        add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn, downloadBtn)));
         add(taskGrid);
+//        List<Task> tasks = taskService.findAll();
+//        try
+//        {
+//            new PdfExporter<Task>().exportToPdf( tasks, "tasks.pdf");
+//        }
+//        catch( Exception e )
+//        {
+//            System.out.println("No data exported");
+//        }
+
     }
 
     private void createTask() {
@@ -78,6 +99,32 @@ class TaskListView extends Main {
         dueDate.clear();
         Notification.show("Task added", 3000, Notification.Position.BOTTOM_END)
                 .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    }
+
+    private void downloadPdfAction(){
+        try {
+            List<Task> tasks = taskService.findAll();
+            File pdfFile = File.createTempFile( "tasks-", ".pdf");
+            new PdfExporter<Task>().exportToPdf(tasks, pdfFile.getAbsolutePath());
+
+            StreamResource resource = new StreamResource( "tasks.pdf",
+                                                          () -> {
+                                                              try
+                                                              {
+                                                                  return new FileInputStream( pdfFile);
+                                                              }
+                                                              catch( FileNotFoundException e )
+                                                              {
+                                                                  throw new RuntimeException( e );
+                                                              }
+                                                          }
+            );
+            Anchor downloadLink = new Anchor( resource, "Click to download");
+            downloadLink.getElement().setAttribute("download", true);
+            add(downloadLink);
+        } catch (Exception e) {
+            Notification.show("Error generating PDF: " + e.getMessage());
+        }
     }
 
 }
