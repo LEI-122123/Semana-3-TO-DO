@@ -98,9 +98,9 @@ application.
 
 ## Initialize the MariaDB database
 
-- Download MariaDB
-- Create a new database
-  - `CREATE DATABASE <database_name>;`
+- Download and install [MariaDB Server](https://mariadb.org/download/)
+- Create a new database named "semana3db"
+  - `CREATE DATABASE semana3db;`
 
 ### Useful MariaDB queries/commands:  
 
