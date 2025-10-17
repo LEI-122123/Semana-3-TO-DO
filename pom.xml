@@ -78,11 +78,14 @@
             <artifactId>openpdf</artifactId>
             <version>3.0.0</version>
         <!-- https://mvnrepository.com/artifact/org.jfree/jfreechart -->
+        </dependency>
+
         <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.5.6</version>
         </dependency>
+
     </dependencies>
 
     <build>
