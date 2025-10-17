@@ -21,7 +21,7 @@ import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRe
 
 @Route("users")
 @PageTitle("User Management")
-@Menu(order = 1, icon = "vaadin:users", title = "User Manager")
+@Menu(order = 5, icon = "vaadin:users", title = "User Manager")
 public class UserView extends VerticalLayout {
 
     private final UserService userService;
