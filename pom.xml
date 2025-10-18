@@ -76,10 +76,11 @@
         -->
 
         <!-- === PDF & Reporting === -->
+        <!-- https://mvnrepository.com/artifact/com.github.librepdf/openpdf -->
         <dependency>
             <groupId>com.github.librepdf</groupId>
             <artifactId>openpdf</artifactId>
-            <version>1.4.1</version>
+            <version>3.0.0</version>
         </dependency>
 
         <!-- Charts (optional, for reports/analytics) -->
