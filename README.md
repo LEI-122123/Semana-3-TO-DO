@@ -95,6 +95,40 @@ App implementation. You'll learn how to set up your development environment, und
 structure, and find resources to help you add muscles to your skeleton — transforming it into a fully-featured 
 application.
 
+## Pipeline
+
+This pipeline is meant to enable the automation of the .jar generation everytime the "main" branch is updated.
+
+When we push to main the following actions are triggered:
+
+Downloads the code from the repo to run.
+Configures java.
+Executes the build with maven using mvn clean package command generating the .jar file
+Publishes the .jar file as an artefact.
+
+
+steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B clean package
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: |
+            **/target/*.jar
+          if-no-files-found: error
+          retention-days: 14
 
 ## Initialize the MariaDB database
 
