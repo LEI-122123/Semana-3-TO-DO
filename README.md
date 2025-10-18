@@ -25,12 +25,23 @@ src
 │       │       │   └── ViewToolbar.java
 │       │       ├── MainErrorHandler.java
 │       │       └── MainLayout.java
+│       ├── charts113239
+│       │   ├── ui
+│       │   │   └── GraphsView.java
+│       │   ├── Graphs.java
+│       │   ├── GraphsRepository.java
+│       │   └── GraphsService.java
 │       ├── examplefeature
 │       │   ├── ui
 │       │   │   └── TaskListView.java
 │       │   ├── Task.java
 │       │   ├── TaskRepository.java
 │       │   └── TaskService.java
+│       ├── pdfexporter
+│       │   ├── ui
+│       │   │   └── PdfExporterView.java
+│       │   ├── PdfExporter.java
+│       │   └── package-info.java
 │       ├── user
 │       │   ├── ui
 │       │   │   └── UserView.java
@@ -133,6 +144,7 @@ steps:
 ## Initialize the MariaDB database
 
 - Download and install [MariaDB Server](https://mariadb.org/download/)
+  - Uncheck the "change root password" feature
 - Create a new database named "semana3db"
   - `CREATE DATABASE semana3db;`
 
