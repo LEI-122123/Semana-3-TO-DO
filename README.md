@@ -1,6 +1,10 @@
 # App README
 
-- [ ] TODO Replace or update this README with instructions relevant to your application
+- 66174 Rúben Rocha  
+- 106090 Tiago Alves  
+- 113239 Pedro Veloso  
+- 122123 Rodrigo Delaunay  
+
 
 ## Project Structure
 
@@ -21,12 +25,29 @@ src
 │       │       │   └── ViewToolbar.java
 │       │       ├── MainErrorHandler.java
 │       │       └── MainLayout.java
+│       ├── charts113239
+│       │   ├── ui
+│       │   │   └── GraphsView.java
+│       │   ├── Graphs.java
+│       │   ├── GraphsRepository.java
+│       │   └── GraphsService.java
 │       ├── examplefeature
 │       │   ├── ui
 │       │   │   └── TaskListView.java
 │       │   ├── Task.java
 │       │   ├── TaskRepository.java
-│       │   └── TaskService.java                
+│       │   └── TaskService.java
+│       ├── pdfexporter
+│       │   ├── ui
+│       │   │   └── PdfExporterView.java
+│       │   ├── PdfExporter.java
+│       │   └── package-info.java
+│       ├── user
+│       │   ├── ui
+│       │   │   └── UserView.java
+│       │   ├── User.java
+│       │   ├── UserRepository.java
+│       │   └── UserService.java                
 │       └── Application.java       
 └── test/java
     └── [application package]
@@ -119,3 +140,34 @@ steps:
             **/target/*.jar
           if-no-files-found: error
           retention-days: 14
+
+## Initialize the MariaDB database
+
+- Download and install [MariaDB Server](https://mariadb.org/download/)
+  - Uncheck the "change root password" feature
+- Create a new database named "semana3db"
+  - `CREATE DATABASE semana3db;`
+
+### Useful MariaDB queries/commands:  
+
+#### - Base commands:
+```mysql 
+SELECT User, Host FROM mysql.user;  # Check existing users on mariadb
+SELECT USER();      # Check who you authenticated as
+SHOW DATABASES      # Check existing databases
+USE <database>;     # Select which database you want to perform queries on
+SHOW TABLES;        # Show existing tables on the current database you selected
+DESCRIBE <table>;   # Show the data structure of a specified table 
+```
+
+#### - Clear and reset an existing table:
+```mysql
+TRUNCATE TABLE <table_name>;
+ALTER TABLE <table_name> AUTO_INCREMENT = 1;
+```
+
+#### - Change an user password:
+```mysql
+ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('new_password');
+FLUSH PRIVILEGES;
+```
