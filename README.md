@@ -1,6 +1,10 @@
 # App README
 
-- [ ] TODO Replace or update this README with instructions relevant to your application
+- 66174 Rúben Rocha  
+- 106090 Tiago Alves  
+- 113239 Pedro Veloso  
+- 122123 Rodrigo Delaunay  
+
 
 ## Project Structure
 
@@ -21,12 +25,29 @@ src
 │       │       │   └── ViewToolbar.java
 │       │       ├── MainErrorHandler.java
 │       │       └── MainLayout.java
+│       ├── charts113239
+│       │   ├── ui
+│       │   │   └── GraphsView.java
+│       │   ├── Graphs.java
+│       │   ├── GraphsRepository.java
+│       │   └── GraphsService.java
 │       ├── examplefeature
 │       │   ├── ui
 │       │   │   └── TaskListView.java
 │       │   ├── Task.java
 │       │   ├── TaskRepository.java
-│       │   └── TaskService.java                
+│       │   └── TaskService.java
+│       ├── pdfexporter
+│       │   ├── ui
+│       │   │   └── PdfExporterView.java
+│       │   ├── PdfExporter.java
+│       │   └── package-info.java
+│       ├── user
+│       │   ├── ui
+│       │   │   └── UserView.java
+│       │   ├── User.java
+│       │   ├── UserRepository.java
+│       │   └── UserService.java                
 │       └── Application.java       
 └── test/java
     └── [application package]
@@ -84,3 +105,69 @@ The [Getting Started](https://vaadin.com/docs/latest/getting-started) guide will
 App implementation. You'll learn how to set up your development environment, understand the project 
 structure, and find resources to help you add muscles to your skeleton — transforming it into a fully-featured 
 application.
+
+## Pipeline
+
+This pipeline is meant to enable the automation of the .jar generation everytime the "main" branch is updated.
+
+When we push to main the following actions are triggered:
+
+Downloads the code from the repo to run.
+Configures java.
+Executes the build with maven using mvn clean package command generating the .jar file
+Publishes the .jar file as an artefact.
+
+
+steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B clean package
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: |
+            **/target/*.jar
+          if-no-files-found: error
+          retention-days: 14
+
+## Initialize the MariaDB database
+
+- Download and install [MariaDB Server](https://mariadb.org/download/)
+  - Uncheck the "change root password" feature
+- Create a new database named "semana3db"
+  - `CREATE DATABASE semana3db;`
+
+### Useful MariaDB queries/commands:  
+
+#### - Base commands:
+```mysql 
+SELECT User, Host FROM mysql.user;  # Check existing users on mariadb
+SELECT USER();      # Check who you authenticated as
+SHOW DATABASES      # Check existing databases
+USE <database>;     # Select which database you want to perform queries on
+SHOW TABLES;        # Show existing tables on the current database you selected
+DESCRIBE <table>;   # Show the data structure of a specified table 
+```
+
+#### - Clear and reset an existing table:
+```mysql
+TRUNCATE TABLE <table_name>;
+ALTER TABLE <table_name> AUTO_INCREMENT = 1;
+```
+
+#### - Change an user password:
+```mysql
+ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('new_password');
+FLUSH PRIVILEGES;
+```
