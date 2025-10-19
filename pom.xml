@@ -66,14 +66,12 @@
             <version>3.5.6</version>
         </dependency>
 
-        <!-- H2 (uncomment for local dev only) -->
-        <!--
+        <!-- H2 in "test" scope only, to pass tests -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <scope>test</scope>
         </dependency>
-        -->
 
         <!-- === PDF & Reporting === -->
         <!-- https://mvnrepository.com/artifact/com.github.librepdf/openpdf -->
@@ -90,13 +88,6 @@
             <version>1.5.6</version>
         </dependency>
 
-        <!-- === Testing === -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.joda/joda-money -->
         <dependency>
             <groupId>org.joda</groupId>
@@ -104,6 +95,12 @@
             <version>2.0.2</version>
         </dependency>
 
+        <!-- === Testing === -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
