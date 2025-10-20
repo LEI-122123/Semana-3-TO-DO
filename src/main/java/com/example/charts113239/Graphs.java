@@ -2,13 +2,10 @@ package com.example.charts113239;
 
 import jakarta.persistence.*;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jspecify.annotations.NullMarked;
 
-import javax.swing.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -21,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Graphs {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "task_id")
+    @Column(name = "graph_id")
     private Long id;
 
 
