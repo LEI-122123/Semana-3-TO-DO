@@ -1,5 +1,6 @@
 package com.example.user;
 
+import com.example.IFindAll;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UserService
+public class UserService implements IFindAll<User>
 {
     private final UserRepository userRepository;
 

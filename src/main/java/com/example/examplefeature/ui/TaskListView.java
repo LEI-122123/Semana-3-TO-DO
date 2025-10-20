@@ -59,8 +59,8 @@ class TaskListView extends Main {
         createBtn = new Button("Create", event -> createTask());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        downloadBtn = new Button("Download PDF", event -> downloadPdfAction());
-        downloadBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        PdfExporter<Task> exporter = new PdfExporter<>();
+        downloadBtn = exporter.pdfExportButton(this,"tasks", taskService);
 
         var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(getLocale())
                 .withZone(ZoneId.systemDefault());
@@ -80,17 +80,7 @@ class TaskListView extends Main {
 
         add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn, downloadBtn)));
         add(taskGrid);
-//        List<Task> tasks = taskService.findAll();
-//        try
-//        {
-//            new PdfExporter<Task>().exportToPdf( tasks, "tasks.pdf");
-//        }
-//        catch( Exception e )
-//        {
-//            System.out.println("No data exported");
-//        }
-
-    }
+        }
 
     private void createTask() {
         taskService.createTask(description.getValue(), dueDate.getValue());
@@ -100,31 +90,4 @@ class TaskListView extends Main {
         Notification.show("Task added", 3000, Notification.Position.BOTTOM_END)
                 .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     }
-
-    private void downloadPdfAction(){
-        try {
-            List<Task> tasks = taskService.findAll();
-            File pdfFile = File.createTempFile( "tasks-", ".pdf");
-            new PdfExporter<Task>().exportToPdf(tasks, pdfFile.getAbsolutePath());
-
-            StreamResource resource = new StreamResource( "tasks.pdf",
-                                                          () -> {
-                                                              try
-                                                              {
-                                                                  return new FileInputStream( pdfFile);
-                                                              }
-                                                              catch( FileNotFoundException e )
-                                                              {
-                                                                  throw new RuntimeException( e );
-                                                              }
-                                                          }
-            );
-            Anchor downloadLink = new Anchor( resource, "Click to download");
-            downloadLink.getElement().setAttribute("download", true);
-            add(downloadLink);
-        } catch (Exception e) {
-            Notification.show("Error generating PDF: " + e.getMessage());
-        }
-    }
-
 }
