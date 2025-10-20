@@ -1,5 +1,13 @@
 package com.example.pdfexporter;
 
+import com.example.IFindAll;
+import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.server.StreamResource;
+
 import org.openpdf.text.*;
 import org.openpdf.text.Font;
 import org.openpdf.text.pdf.PdfPCell;
@@ -7,8 +15,13 @@ import org.openpdf.text.pdf.PdfPTable;
 import org.openpdf.text.pdf.PdfWriter;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PdfExporter<T> {
@@ -54,5 +67,51 @@ public class PdfExporter<T> {
 
         document.add(table);
         document.close();
+    }
+
+    public Button pdfExportButton(HasComponents parentLayout, String prefix, IFindAll<T> dataSupplier)
+    {
+        Button downloadBtn = new Button("Download PDF");
+        downloadBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        downloadBtn.addClickListener(e -> downloadPdfAction(parentLayout, downloadBtn, prefix, dataSupplier));
+        return downloadBtn;
+    }
+
+    private void downloadPdfAction(HasComponents parentLayout, Button downloadBtn, String prefix, IFindAll<T> dataSupplier) {
+        try {
+            // Get the list of items dynamically from the supplier
+            List<T> items = dataSupplier.findAll();
+
+            // Create temporary PDF file
+            DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("ddMMyyyy-HHmmss");
+            String formattedDate = LocalDateTime.now().format(myFormatObj);
+            String filename = prefix + "-" + formattedDate;
+            File pdfFile = File.createTempFile(filename, ".pdf");
+
+            // Export to PDF
+            exportToPdf(items, pdfFile.getAbsolutePath());
+
+            StreamResource resource = new StreamResource( filename + ".pdf",
+                    () -> {
+                        try
+                        {
+                            return new FileInputStream( pdfFile);
+                        }
+                        catch( FileNotFoundException e )
+                        {
+                            throw new RuntimeException( e );
+                        }
+                    }
+            );
+
+            Anchor downloadLink = new Anchor(resource, "");
+            downloadLink.getElement().setAttribute("download", true);
+            downloadLink.getStyle().set("display", "none"); // hide the anchor
+            downloadBtn.getParent().ifPresent(parent -> ((HasComponents) parent).add(downloadLink));
+            downloadLink.getElement().executeJs("this.click()");    // trigger the download
+
+        } catch (Exception e) {
+            Notification.show("Error generating PDF: " + e.getMessage());
+        }
     }
 }
