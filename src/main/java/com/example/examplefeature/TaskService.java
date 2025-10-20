@@ -1,5 +1,6 @@
 package com.example.examplefeature;
 
+import com.example.IFindAll;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class TaskService {
+public class TaskService implements IFindAll<Task> {
 
     private final TaskRepository taskRepository;
 

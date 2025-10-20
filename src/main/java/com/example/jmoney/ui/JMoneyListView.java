@@ -3,6 +3,9 @@ package com.example.jmoney.ui;
 import com.example.base.ui.component.ViewToolbar;
 import com.example.jmoney.JMoney;
 import com.example.jmoney.JMoneyService;
+import com.example.pdfexporter.PdfExporter;
+import com.example.user.User;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -12,6 +15,9 @@ import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Menu;
@@ -64,6 +70,33 @@ class JMoneyListView extends Main {
         createBtn = new Button("Add Record", event -> createJMoney());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
+        // PDF Exporter button
+        PdfExporter<JMoney> exporter = new PdfExporter<>();
+        Button downloadBtn = exporter.pdfExportButton(this, "wallet", jMoneyService);
+        downloadBtn.addThemeVariants(ButtonVariant.LUMO_SMALL);
+
+        // === Buttons stacked vertically ===
+        VerticalLayout buttonsLayout = new VerticalLayout(downloadBtn, createBtn);
+        buttonsLayout.setPadding(false);
+        buttonsLayout.setSpacing(true);
+        buttonsLayout.setAlignItems(FlexComponent.Alignment.START);
+
+        // === Inputs row with buttons at the end ===
+        HorizontalLayout inputsLayout = new HorizontalLayout(new ViewToolbar("My Wallet (€)",ViewToolbar.group(type, description, amount, transactionDate, buttonsLayout)));
+        inputsLayout.setAlignItems(FlexComponent.Alignment.END); // aligns button stack with bottom of inputs
+        inputsLayout.setSpacing(true);
+        inputsLayout.setVerticalComponentAlignment(FlexComponent.Alignment.BASELINE);
+
+        // === Balance Display ===
+        balanceDisplay = new Span();
+        balanceDisplay.getStyle().set("font-weight", "bold");
+        updateBalance();
+
+        // === Toolbar vertical layout: inputs row + balance display row ===
+        VerticalLayout toolbar = new VerticalLayout(inputsLayout, balanceDisplay);
+        toolbar.setPadding(false);
+        toolbar.setSpacing(true);
+
         // === Grid ===
         var dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
                 .withLocale(getLocale());
@@ -73,35 +106,28 @@ class JMoneyListView extends Main {
         jMoneyGrid.addColumn(JMoney::getDescription).setHeader("Description").setAutoWidth(true);
         jMoneyGrid.addColumn(j -> j.getMoney().toString()).setHeader("Amount (€)").setAutoWidth(true);
         jMoneyGrid.addColumn(j ->
-                                     Optional.ofNullable(j.getTransactionDate())
-                                             .map(dateFormatter::format)
-                                             .orElse("No date"))
+                        Optional.ofNullable(j.getTransactionDate())
+                                .map(dateFormatter::format)
+                                .orElse("No date"))
                 .setHeader("Transaction Date")
                 .setAutoWidth(true);
 
         jMoneyGrid.setItems(query ->
-                                    jMoneyService.list(toSpringPageRequest(query)).stream()
-                                            .sorted(Comparator.comparing(JMoney::getTransactionDate,
-                                                                         Comparator.nullsLast(Comparator.reverseOrder())))
+                jMoneyService.list(toSpringPageRequest(query)).stream()
+                        .sorted(Comparator.comparing(JMoney::getTransactionDate,
+                                Comparator.nullsLast(Comparator.reverseOrder())))
         );
         jMoneyGrid.setSizeFull();
 
-        // === Balance Display ===
-        balanceDisplay = new Span();
-        balanceDisplay.getStyle().set("font-weight", "bold");
-        updateBalance();
-
-        // === Layout ===
+        // === Layout for the view ===
         setSizeFull();
         addClassNames(LumoUtility.BoxSizing.BORDER, LumoUtility.Display.FLEX,
-                      LumoUtility.FlexDirection.COLUMN, LumoUtility.Padding.MEDIUM,
-                      LumoUtility.Gap.SMALL);
+                LumoUtility.FlexDirection.COLUMN, LumoUtility.Padding.MEDIUM,
+                LumoUtility.Gap.SMALL);
 
-        add(new ViewToolbar("My Wallet (€)",
-                            ViewToolbar.group(type, description, amount, transactionDate, createBtn),
-                            balanceDisplay));
-        add(jMoneyGrid);
+        add(toolbar, jMoneyGrid);
     }
+
 
     private void createJMoney() {
         if (type.isEmpty() || amount.isEmpty()) {

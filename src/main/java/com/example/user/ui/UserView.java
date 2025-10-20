@@ -1,5 +1,8 @@
 package com.example.user.ui;
 
+import com.example.base.ui.component.ViewToolbar;
+import com.example.examplefeature.Task;
+import com.example.pdfexporter.PdfExporter;
 import com.example.user.User;
 import com.example.user.UserService;
 import com.vaadin.flow.component.button.Button;
@@ -44,7 +47,11 @@ public class UserView extends VerticalLayout {
         Button addUserBtn = new Button("Add User", e -> openAddUserDialog());
         addUserBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        add(addUserBtn, userGrid);
+        PdfExporter<User> exporter = new PdfExporter<>();
+        Button downloadBtn = exporter.pdfExportButton(this,"users", userService);
+
+        add(new ViewToolbar("Users", ViewToolbar.group(addUserBtn, downloadBtn)));
+        add(userGrid);
         setSizeFull();
     }
 
