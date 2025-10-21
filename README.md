@@ -1,10 +1,12 @@
 # App README
 
+## Group elements:
 - 66174 Rúben Rocha  
 - 106090 Tiago Alves  
 - 113239 Pedro Veloso  
 - 122123 Rodrigo Delaunay  
 
+### [Demo of the app on youtube](https://www.youtube.com/watch?v=g93oCkNMEKA)
 
 ## Project Structure
 
