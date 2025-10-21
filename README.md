@@ -132,12 +132,16 @@ This pipeline is meant to enable the automation of the .jar generation everytime
 
 When we push to main the following actions are triggered:
 
-Downloads the code from the repo to run.
-Configures java.
-Executes the build with maven using mvn clean package command generating the .jar file
-Publishes the .jar file as an artefact.
+- Grabs the codebase from the repository
+- Sets up a java environment with maven build system
+- Downloads the required dependencies
+- Executes the build with maven in test mode, using H2 Database:  
+`run: mvn -B clean package -Dspring.profiles.active=ci`
+- After passing the tests, builds and packages jar file with MariaDB, skipping tests  
+`run: mvn -B package -Pproduction -DskipTests`
+- Publishes the .jar file as an artefact.
 
-
+```yaml
 steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -160,6 +164,7 @@ steps:
             **/target/*.jar
           if-no-files-found: error
           retention-days: 14
+```
 
 ## Initialize the MariaDB database
 
