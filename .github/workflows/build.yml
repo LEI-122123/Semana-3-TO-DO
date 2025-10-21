@@ -19,8 +19,11 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Build with Maven
+      - name: Build with Maven (Using H2 Database for tests)
         run: mvn -B clean package -Dspring.profiles.active=ci
+
+      - name: Build production JAR with MariaDB
+        run: mvn -B package -Pproduction -DskipTests
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
