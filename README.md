@@ -15,46 +15,64 @@ The sources of your App have the following structure:
 ```
 src
 ├── main/frontend
+│   ├── index.html
 │   └── themes
 │       └── default
 │           ├── styles.css
 │           └── theme.json
 ├── main/java
-│   └── [application package]
-│       ├── base
-│       │   └── ui
-│       │       ├── component
-│       │       │   └── ViewToolbar.java
-│       │       ├── MainErrorHandler.java
-│       │       └── MainLayout.java
-│       ├── charts113239
-│       │   ├── ui
-│       │   │   └── GraphsView.java
-│       │   ├── Graphs.java
-│       │   ├── GraphsRepository.java
-│       │   └── GraphsService.java
-│       ├── examplefeature
-│       │   ├── ui
-│       │   │   └── TaskListView.java
-│       │   ├── Task.java
-│       │   ├── TaskRepository.java
-│       │   └── TaskService.java
-│       ├── pdfexporter
-│       │   ├── ui
-│       │   │   └── PdfExporterView.java
-│       │   ├── PdfExporter.java
-│       │   └── package-info.java
-│       ├── user
-│       │   ├── ui
-│       │   │   └── UserView.java
-│       │   ├── User.java
-│       │   ├── UserRepository.java
-│       │   └── UserService.java                
-│       └── Application.java       
-└── test/java
-    └── [application package]
-        └── examplefeature
-           └── TaskServiceTest.java                 
+│   └── com
+│       └── example
+│           ├── Application.java
+│           ├── base
+│           │   └── ui
+│           │       ├── component
+│           │       │   └── ViewToolbar.java
+│           │       ├── MainErrorHandler.java
+│           │       └── MainLayout.java
+│           ├── charts113239
+│           │   ├── Graphs.java
+│           │   ├── GraphsRepository.java
+│           │   ├── GraphsService.java
+│           │   ├── package-info.java
+│           │   └── ui
+│           │       └── GraphsView.java
+│           ├── examplefeature
+│           │   ├── package-info.java
+│           │   ├── Task.java
+│           │   ├── TaskRepository.java
+│           │   ├── TaskService.java
+│           │   └── ui
+│           │       └── TaskListView.java
+│           ├── IFindAll.java
+│           ├── jmoney
+│           │   ├── JMoney.java
+│           │   ├── JMoneyRepository.java
+│           │   ├── JMoneyService.java
+│           │   ├── package-info.java
+│           │   └── ui
+│           │       └── JMoneyListView.java
+│           ├── pdfexporter
+│           │   ├── package-info.java
+│           │   ├── PdfExporter.java
+│           │   └── ui
+│           │       └── PdfExporterView.java
+│           └── user
+│               ├── package-info.java
+│               ├── ui
+│               │   └── UserView.java
+│               ├── User.java
+│               ├── UserRepository.java
+│               └── UserService.java
+├── main/resources
+│   ├── application-ci.properties
+│   └── application.properties
+└── test
+    └── java
+        └── com
+            └── example
+                └── examplefeature
+                    └── TaskServiceTest.java
 ```
 
 The main entry point into the application is `Application.java`. This class contains the `main()` method that start up 
