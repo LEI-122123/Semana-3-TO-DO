@@ -1,38 +1,53 @@
-name: SonarQube analysis
+name: SonarQube analysis (manual Java 17)
 
 on:
   push:
     branches:
       - main
-      - '113239-Pedro-Feature'   # ou usa 'feature/*' para cobrir vários
+      - '113239-Pedro-Feature'
   pull_request:
     branches:
       - main
   workflow_dispatch:
 
 permissions:
-  pull-requests: read # permite ao SonarQube decorar PRs com resultados
+  pull-requests: read
 
 jobs:
   Analysis:
     runs-on: ubuntu-latest
-    container:
-      image: eclipse-temurin:17-jdk # 🔹 executa tudo com Java 17
 
     steps:
       # 1️⃣ Clonar o repositório
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # importante para o Sonar comparar branches
+          fetch-depth: 0
 
-      # 2️⃣ Executar a análise SonarQube
-      - name: Analyze with SonarQube
-        uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # necessário para PRs
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     # token criado no SonarQube
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} # URL do teu SonarQube (ex: https://sonarqube.mycompany.com)
+      # 2️⃣ Instalar JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          args: >
-            -Dsonar.projectKey=LEI-122123_Semana-3-TO-DO
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 3️⃣ Instalar SonarScanner CLI (versão moderna compatível com Java 17)
+      - name: Install SonarScanner CLI
+        run: |
+          wget -q https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-6.1.0.4477-linux.zip
+          unzip -q sonar-scanner-6.1.0.4477-linux.zip
+          mv sonar-scanner-6.1.0.4477-linux sonar-scanner
+          echo "$PWD/sonar-scanner/bin" >> $GITHUB_PATH
+
+      # 4️⃣ Executar análise
+      - name: Run SonarQube analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=LEI-122123_Semana-3-TO-DO \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.login=$SONAR_TOKEN \
+            -Dsonar.sources=. \
+            -Dsonar.java.binaries=target
