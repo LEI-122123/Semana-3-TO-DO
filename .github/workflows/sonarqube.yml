@@ -4,40 +4,35 @@ on:
   push:
     branches:
       - main
-      - '113239-Pedro-Feature'
+      - '113239-Pedro-Feature'   # ou usa 'feature/*' para cobrir vários
   pull_request:
     branches:
       - main
   workflow_dispatch:
 
 permissions:
-  pull-requests: read # allows SonarQube to decorate PRs with analysis results
+  pull-requests: read # permite ao SonarQube decorar PRs com resultados
 
 jobs:
   Analysis:
     runs-on: ubuntu-latest
+    container:
+      image: eclipse-temurin:17-jdk # 🔹 executa tudo com Java 17
 
     steps:
-      # 1️⃣ Checkout do código
+      # 1️⃣ Clonar o repositório
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # importante para Sonar comparar branches
+          fetch-depth: 0 # importante para o Sonar comparar branches
 
-      # 2️⃣ Instalar Java 17 (para o scanner funcionar)
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      # 3️⃣ Análise SonarQube
+      # 2️⃣ Executar a análise SonarQube
       - name: Analyze with SonarQube
         uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # necessário para PRs
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     # token criado no SonarQube
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} # URL do teu SonarQube (ex: https://sonarqube.mycompany.com)
         with:
           args: >
-            -Dsonar.projectKey=teu_project_key_aqui
+            -Dsonar.projectKey=LEI-122123_Semana-3-TO-DO
