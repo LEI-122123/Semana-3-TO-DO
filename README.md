@@ -7,6 +7,7 @@
 - 122123 Rodrigo Delaunay  
 
 ### [Demo of the app on youtube](https://www.youtube.com/watch?v=g93oCkNMEKA)
+[![App demo video thumbnail](https://img.youtube.com/vi/g93oCkNMEKA/0.jpg)](https://www.youtube.com/watch?v=g93oCkNMEKA)
 
 ## Project Structure
 
