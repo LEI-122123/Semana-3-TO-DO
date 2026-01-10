@@ -3,7 +3,7 @@ services:
     image: mariadb:latest
     container_name: to_do_mariadb
     environment:
-      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: semana3db
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
     ports:
       - "3306:3306"
